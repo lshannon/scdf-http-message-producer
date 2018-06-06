@@ -41,7 +41,8 @@ public class SimpleMessageProducerApplication {
 			if (endpoint != null) {
 				for (int i = 0; i < 10000; i++) {
 					HttpEntity<String> payload = new HttpEntity<String>("A number for you! : " + i);
-					restTemplate.postForLocation(endpoint, payload);				
+					restTemplate.postForLocation(endpoint, payload);
+					log.info("Sent message: " +  payload.getBody() + " to " + endpoint);
 				}
 			}
 			else {
