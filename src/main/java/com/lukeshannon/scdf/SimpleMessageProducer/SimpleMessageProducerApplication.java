@@ -1,5 +1,8 @@
 package com.lukeshannon.scdf.SimpleMessageProducer;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,7 +34,9 @@ public class SimpleMessageProducerApplication {
 		/*
 		 * To get the code to compile a valid looking URL needs be set
 		 */
-		@Value("${endpoint:null}")
+		@Value("${endpoint}")
+		@NotNull
+		@Size(min=1)
 		private String endpoint;
 
 		@Override
@@ -40,7 +45,7 @@ public class SimpleMessageProducerApplication {
 			log.info("Ready to send messges to : " + endpoint);
 			if (endpoint != null) {
 				for (int i = 0; i < 10000; i++) {
-					HttpEntity<String> payload = new HttpEntity<String>("A number for you! : " + i);
+					HttpEntity<SimpleMessage> payload = new HttpEntity<String>("A number for you! : " + i);
 					restTemplate.postForLocation(endpoint, payload);
 					log.info("Sent message: " +  payload.getBody() + " to " + endpoint);
 				}
@@ -48,6 +53,12 @@ public class SimpleMessageProducerApplication {
 			else {
 				log.error("Endpoint value is not set. No messages sent");
 			}
+		}
+		
+		class SimpleMessage {
+			private String name;
+			
+			private int id;
 		}
 	}
 
