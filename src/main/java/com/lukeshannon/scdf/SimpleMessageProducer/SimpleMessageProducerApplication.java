@@ -1,5 +1,6 @@
 package com.lukeshannon.scdf.SimpleMessageProducer;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -38,16 +39,35 @@ public class SimpleMessageProducerApplication {
 		@NotNull
 		@Size(min=1)
 		private String endpoint;
+		
+		@Value("${message}")
+		@NotNull
+		@Size(min=1)
+		private String message;
+		
+		@Value("${numberOfMessages}")
+		@Min(1)
+		private int numberOfMessages;
+		
+		@Value("${complexMessage}")
+		private boolean complexMessage;
 
 		@Override
 		public void run(String... strings) throws Exception {
 			RestTemplate restTemplate = new RestTemplate();
 			log.info("Ready to send messges to : " + endpoint);
 			if (endpoint != null) {
-				for (int i = 0; i < 10000; i++) {
-					HttpEntity<SimpleMessage> payload = new HttpEntity<String>("A number for you! : " + i);
-					restTemplate.postForLocation(endpoint, payload);
-					log.info("Sent message: " +  payload.getBody() + " to " + endpoint);
+				for (int i = 0; i < numberOfMessages; i++) {
+					if (complexMessage) {
+						HttpEntity<SimpleMessage> payload = new HttpEntity<SimpleMessage>(new SimpleMessage("Simple Message: " + i, i, message));
+						restTemplate.postForLocation(endpoint, payload);
+						log.info("Sent message: " +  payload.getBody() + " to " + endpoint);
+					}
+					else {
+						HttpEntity<String> payload = new HttpEntity<String>(message + " : " + i);
+						restTemplate.postForLocation(endpoint, payload);
+						log.info("Sent message: " +  payload.getBody() + " to " + endpoint);
+					}
 				}
 			}
 			else {
@@ -56,9 +76,35 @@ public class SimpleMessageProducerApplication {
 		}
 		
 		class SimpleMessage {
-			private String name;
 			
+			private String name;
 			private int id;
+			private String description;
+			
+			public SimpleMessage(String name, int id, String description) {
+				this.name = name;
+				this.id = id;
+				this.description = description;
+			}
+			
+			public String getName() {
+				return name;
+			}
+			public void setName(String name) {
+				this.name = name;
+			}
+			public int getId() {
+				return id;
+			}
+			public void setId(int id) {
+				this.id = id;
+			}
+			public String getDescription() {
+				return description;
+			}
+			public void setDescription(String description) {
+				this.description = description;
+			}
 		}
 	}
 
