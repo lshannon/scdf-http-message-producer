@@ -67,6 +67,6 @@ cf set-env message-producer USEJMS true
 
 ```shell
 
-cf run-task message-producer ".java-buildpack/open_jdk_jre/bin/java org.springframework.boot.loader.JarLauncher --name messages
+cf run-task message-producer ".java-buildpack/open_jdk_jre/bin/java org.springframework.boot.loader.JarLauncher" --name messages
 
 ```
