@@ -26,7 +26,7 @@ cf push --health-check-type none --no-start -p target/http-message-producer.jar 
 
 ``` shell
 
-cf set-env message-producer ENDPOINT https://cndescdf-dataflow-server-rhlqe0u-s1-http.cfapps.io/
+cf set-env message-producer ENDPOINT https://cndescdf-dataflow-server-rhlqe0u-s1-http.cfapps.io/ NUMBEROFMESSAGES 10
 
 ```
 
@@ -38,19 +38,11 @@ This will send a 'SimpleMessage' Pojo. It contains a Id and Name attribute.
 
 ``` shell
 
-cf set-env message-producer ENDPOINT https://cndescdf-dataflow-server-rhlqe0u-s1-http.cfapps.io/ POJO true 
+cf set-env message-producer ENDPOINT https://cndescdf-dataflow-server-rhlqe0u-s1-http.cfapps.io/ POJO true NUMBEROFMESSAGES 10
 
 ```
 
 Do not restage, running the task will pick up the Env change.
-
-## Running The Task - Sending The Messages
-
-```shell
-
-cf run-task message-producer ".java-buildpack/open_jdk_jre/bin/java org.springframework.boot.loader.JarLauncher --name messages
-
-```
 
 ## Configuring JMS Messages
 
@@ -60,7 +52,7 @@ Using these settings will publish messages to a JMS Queue. Currently this is har
 
 ``` shell
 
-cf set-env message-producer USEJMS true
+cf set-env message-producer USEJMS true NUMBEROFMESSAGES 10
 
 ```
 
@@ -71,6 +63,14 @@ As in the example above, a simple POJO can also be posted to the JMS queue.
 
 ``` shell
 
-cf set-env message-producer USEJMS true POJO true
+cf set-env message-producer USEJMS true POJO true NUMBEROFMESSAGES 10
+
+```
+
+## Sending The Messages
+
+```shell
+
+cf run-task message-producer ".java-buildpack/open_jdk_jre/bin/java org.springframework.boot.loader.JarLauncher --name messages
 
 ```
