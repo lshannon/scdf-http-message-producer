@@ -1,11 +1,19 @@
-# scdf-http-message-producer
+# SCDF Message Producer
 A simple producer of JSON messages. For testing and development or SCDF pipelines
+
+## Compiling The Application
+
+```shell
+
+mvn -DskipTests=true clean package
+
+```
 
 ## Deploying
 
 ```shell
 
-cf push --health-check-type none -p target/http-message-producer.jar message-producer
+cf push --health-check-type none --no-start -p target/http-message-producer.jar message-producer
 
 ```
 
