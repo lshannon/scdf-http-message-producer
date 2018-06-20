@@ -93,7 +93,7 @@ public class SimpleMessageProducerApplication {
 							jmsTemplate.convertAndSend(jmsDestination, messageToSend);
 							log.info("Sent message: " +  messageToSend + " to destination " + jmsDestination);
 						} else {
-							HttpEntity<String> payload = new HttpEntity<String>(message + " : " + i);
+							HttpEntity<String> payload = new HttpEntity<String>(messageToSend + " : " + i);
 							restTemplate.postForLocation(endpoint, payload);
 							log.info("Sent message: " +  payload.getBody() + " to " + endpoint);
 						}
