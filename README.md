@@ -16,7 +16,7 @@ mvn -DskipTests=true clean package
 
 ```shell
 
-cf push --health-check-type none -p target/message-producer.jar message-producer
+cf push --health-check-type none -p target/message-producer.jar message-producer --no-start
 
 ```
 
